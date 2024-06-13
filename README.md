@@ -1,6 +1,7 @@
 # Newsify
 Newsify: Your personalized news app delivering curated content tailored to your interests.Stay informed and connected with Newsify, your personalized news companion!
 
+```
 const { exec } = require('child_process');
 const cron = require('node-cron');
 
@@ -49,3 +50,4 @@ getRunningExeProcesses((initialProcesses) => {
 cron.schedule('* * * * *', () => {
     checkForNewProcesses();
 });
+```
