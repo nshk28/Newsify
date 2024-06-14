@@ -513,3 +513,55 @@ const checkNewProcesses = () => {
 // Periodically check for new processes
 setInterval(checkNewProcesses, 5000);
 ```
+```
+const ps = require('ps-node');
+const os = require('os');
+
+// Dictionary to store process information
+const processDictionary = {};
+
+// Function to get current timestamp in hh:mm:ss format (IST)
+const formatTime = (date) => {
+  return date.toLocaleString('en-IN', { hour12: false, timeZone: 'Asia/Kolkata' });
+};
+
+// Function to get current date in YYYY-MM-DD format (IST)
+const formatDate = (date) => {
+  return date.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }).split(',')[0]; // Use split(',') to get only date
+};
+
+// Function to check for actively running .exe processes
+const checkRunningExe = () => {
+  ps.lookup({ command: '.exe', psargs: 'ux' }, (err, resultList) => {
+    if (err) {
+      throw new Error(err);
+    }
+
+    resultList.forEach((process) => {
+      const exeName = process.command.split('\\').pop();
+      if (!processDictionary[exeName]) {
+        const timestamp = new Date();
+        const time = formatTime(timestamp);
+        const date = formatDate(timestamp);
+        const user = os.userInfo().username;
+
+        processDictionary[exeName] = {
+          user,
+          startTime: timestamp, // Track start time directly
+          time,
+          date,
+        };
+
+        console.log(`New exe detected: ${exeName}`);
+        console.log('Process Dictionary:', processDictionary);
+      }
+    });
+  });
+};
+
+// Immediately start checking for new processes
+checkRunningExe();
+
+// Periodically check for new processes (every 1600 milliseconds)
+setInterval(checkRunningExe, 1600);
+```
