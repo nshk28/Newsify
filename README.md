@@ -460,3 +460,56 @@ const checkRunningExe = () => {
 setInterval(checkRunningExe, 5000);
 
 ```
+```
+const psTree = require('ps-tree');
+
+// Dictionary to store process information
+const processDictionary = {};
+
+// Function to get current timestamp in hh:mm:ss format
+const formatTime = (date) => {
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+// Function to get current date in YYYY-MM-DD format
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+// Function to check for new processes
+const checkNewProcesses = () => {
+  psTree(process.pid, (err, children) => {
+    if (err) {
+      throw new Error(err);
+    }
+
+    children.forEach(child => {
+      const exeName = child.COMMAND.split('/').pop();
+      
+      if (!processDictionary[child.PID]) {
+        const timestamp = new Date();
+        const time = formatTime(timestamp);
+        const date = formatDate(timestamp);
+
+        processDictionary[child.PID] = {
+          exeName,
+          time,
+          date,
+        };
+
+        console.log(`New process detected: ${exeName}`);
+        console.log('Process Dictionary:', processDictionary);
+      }
+    });
+  });
+};
+
+// Periodically check for new processes
+setInterval(checkNewProcesses, 5000);
+```
