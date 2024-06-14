@@ -178,3 +178,74 @@ const detectNewProcesses = async () => {
 
 
 ```
+``` 
+const psList = require('ps-list');
+const watch = require('node-watch');
+const fs = require('fs');
+
+let appDetails = {};  // Dictionary to store app details
+
+// Function to get the current time
+const getCurrentTime = () => {
+    return new Date().toISOString();
+};
+
+// Function to get entitlements associated with an application
+const getEntitlements = (exePath) => {
+    // For the sake of example, returning a dummy entitlement.
+    // In a real-world scenario, you would fetch the actual entitlement.
+    return "basic-entitlement";
+};
+
+// Function to track applications
+const trackApplications = async () => {
+    const processes = await psList();
+
+    processes.forEach((process) => {
+        const exePath = process.cmd;
+
+        if (!appDetails[exePath]) {
+            appDetails[exePath] = {
+                exePath: exePath,
+                startTime: getCurrentTime(),
+                entitlement: getEntitlements(exePath),
+            };
+            console.log(`Started tracking application: ${exePath}`);
+        }
+    });
+};
+
+// Function to update the tracking dictionary when an application closes
+const updateTrackingOnClose = async () => {
+    const processes = await psList();
+    const runningExePaths = processes.map(process => process.cmd);
+
+    for (const exePath in appDetails) {
+        if (!runningExePaths.includes(exePath)) {
+            console.log(`Application closed: ${exePath}`);
+            delete appDetails[exePath];
+        }
+    }
+};
+
+// Watch for changes in running processes
+watch('.', { recursive: true, filter: (f, skip) => {
+    if (f.includes('node_modules') || f.includes('.git')) return skip;
+    return true;
+}}, async (evt, name) => {
+    await trackApplications();
+    await updateTrackingOnClose();
+});
+
+// Initial tracking of applications
+trackApplications().then(() => {
+    console.log('Initial tracking complete.');
+});
+
+// Save the application details to a file every minute
+setInterval(() => {
+    fs.writeFileSync('appDetails.json', JSON.stringify(appDetails, null, 2));
+    console.log('App details saved.');
+}, 60000);
+
+```
