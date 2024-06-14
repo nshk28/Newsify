@@ -327,3 +327,75 @@ let fs;
 })();
 
 ```
+``` 
+// Ensure Node.js version supports top-level await
+let psList;
+let watch;
+let fs;
+
+(async () => {
+    psList = await import('ps-list');
+    fs = await import('fs');
+
+    let appDetails = {};  // Dictionary to store app details
+
+    // Function to get the current time
+    const getCurrentTime = () => {
+        return new Date().toISOString();
+    };
+
+    // Function to get entitlements associated with an application
+    const getEntitlements = (exePath) => {
+        // For the sake of example, returning a dummy entitlement.
+        // In a real-world scenario, you would fetch the actual entitlement.
+        return "basic-entitlement";
+    };
+
+    // Function to track applications
+    const trackApplications = async () => {
+        const processes = await psList.default();
+
+        processes.forEach((process) => {
+            const exePath = process.cmd;
+
+            if (!appDetails[exePath]) {
+                appDetails[exePath] = {
+                    exePath: exePath,
+                    startTime: getCurrentTime(),
+                    entitlement: getEntitlements(exePath),
+                };
+                console.log(`Started tracking application: ${exePath}`);
+            }
+        });
+    };
+
+    // Function to update the tracking dictionary when an application closes
+    const updateTrackingOnClose = async () => {
+        const processes = await psList.default();
+        const runningExePaths = processes.map(process => process.cmd);
+
+        for (const exePath in appDetails) {
+            if (!runningExePaths.includes(exePath)) {
+                console.log(`Application closed: ${exePath}`);
+                delete appDetails[exePath];
+            }
+        }
+    };
+
+    // Periodically check for running processes every 5 seconds
+    setInterval(async () => {
+        await trackApplications();
+        await updateTrackingOnClose();
+    }, 5000); // Check every 5 seconds
+
+    // Initial tracking of applications
+    await trackApplications();
+    console.log('Initial tracking complete.');
+
+    // Save the application details to a file every minute
+    setInterval(() => {
+        fs.writeFileSync('appDetails.json', JSON.stringify(appDetails, null, 2));
+        console.log('App details saved.');
+    }, 60000);
+})();
+```
