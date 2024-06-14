@@ -399,3 +399,64 @@ let fs;
     }, 60000);
 })();
 ```
+``` 
+const ps = require('ps-node');
+const os = require('os');
+
+// Dictionary to store process information
+const processDictionary = {};
+let previousProcesses = new Set(); // Set to store previously tracked processes
+
+// Function to get current timestamp in hh:mm:ss format
+const formatTime = (date) => {
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+// Function to get current date in YYYY-MM-DD format
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+// Function to check for actively running .exe processes
+const checkRunningExe = () => {
+  ps.lookup({ command: '.exe', psargs: 'ux' }, (err, resultList) => {
+    if (err) {
+      throw new Error(err);
+    }
+
+    const currentProcesses = new Set(resultList.map(process => process.command));
+
+    resultList.forEach((process) => {
+      const exeName = process.command.split('\\').pop();
+
+      if (!previousProcesses.has(process.command)) {
+        const timestamp = new Date();
+        const time = formatTime(timestamp);
+        const date = formatDate(timestamp);
+        const user = os.userInfo().username;
+
+        processDictionary[exeName] = {
+          user,
+          time,
+          date,
+        };
+
+        console.log(`New exe detected: ${exeName}`);
+        console.log('Process Dictionary:', processDictionary);
+      }
+    });
+
+    previousProcesses = currentProcesses;
+  });
+};
+
+// Periodically check for new processes
+setInterval(checkRunningExe, 5000);
+
+```
