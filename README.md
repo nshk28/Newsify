@@ -753,3 +753,84 @@ setInterval(checkRunningExe, 10000);
 checkRunningExe();
 
 ```
+```
+const ps = require('ps-node');
+const os = require('os');
+
+// Array to store process information
+const processArray = [];
+
+// Function to get current timestamp in hh:mm:ss format
+const formatTime = (date) => {
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+// Function to get current date in YYYY-MM-DD format
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+// Function to check for actively running .exe processes
+const checkRunningExe = () => {
+  ps.lookup({ command: '.exe', psargs: 'ux' }, (err, resultList) => {
+    if (err) {
+      throw new Error(err);
+    }
+
+    // Get current time and date
+    const timestamp = new Date();
+    const time = formatTime(timestamp);
+    const date = formatDate(timestamp);
+   // const user = os.userInfo().username;
+
+    // Array to store currently running .exe processes
+    const currentProcesses = [];
+
+    resultList.forEach((process) => {
+      const exeName = process.command.split('\\').pop();
+      const pid = process.pid;
+
+      // Exclude certain processes from logging (e.g., chrome.exe)
+      if (exeName.toLowerCase() === 'chrome.exe') {
+        return; // Skip logging chrome.exe
+      }
+
+      const existingProcess = processArray.find(
+        (item) => item.exeName === exeName && item.pid === pid
+      );
+
+      if (!existingProcess) {
+        // Log new instances or restarted processes in one line
+        const newLogEntry = {
+          exeName,
+          pid,
+          time,
+          date
+        };
+        console.log(`New exe detected: ${JSON.stringify(newLogEntry)}\n`);
+
+        // Store in processArray
+        processArray.push(newLogEntry);
+      }
+
+      // Track current running processes
+      currentProcesses.push(pid);
+    });
+
+  });
+};
+
+// Periodically check for new processes every 10 seconds
+setInterval(checkRunningExe, 10000);
+
+// Initial check on startup
+checkRunningExe();
+
+
+```
