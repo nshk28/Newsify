@@ -680,3 +680,76 @@ const checkRunningExe = () => {
 setInterval(checkRunningExe, 1000);
 
 ```
+``` 
+const ps = require('ps-node');
+const os = require('os');
+
+// Map to store unique application names and their last log times
+const loggedApplications = new Map();
+
+// Function to get current timestamp in hh:mm:ss format
+const formatTime = (date) => {
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+// Function to get current date in YYYY-MM-DD format
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+// Function to check for actively running .exe processes
+const checkRunningExe = () => {
+  ps.lookup({ command: '.exe', psargs: 'ux' }, (err, resultList) => {
+    if (err) {
+      throw new Error(err);
+    }
+
+    // Get current time and date
+    const timestamp = new Date();
+    const time = formatTime(timestamp);
+    const date = formatDate(timestamp);
+
+    // Set to track current running applications
+    const currentAppSet = new Set();
+
+    resultList.forEach((process) => {
+      const exeName = process.command.split('\\').pop();
+      currentAppSet.add(exeName);
+
+      // Check if the application has already been logged
+      if (!loggedApplications.has(exeName)) {
+        // Log new applications
+        const newLogEntry = {
+          exeName,
+          time,
+          date
+        };
+        console.log(`New application detected: ${JSON.stringify(newLogEntry)}\n`);
+
+        // Store the application name and its log time
+        loggedApplications.set(exeName, timestamp);
+      }
+    });
+
+    // Remove applications that are no longer running
+    loggedApplications.forEach((logTime, appName) => {
+      if (!currentAppSet.has(appName)) {
+        loggedApplications.delete(appName);
+      }
+    });
+  });
+};
+
+// Periodically check for new processes every 10 seconds
+setInterval(checkRunningExe, 10000);
+
+// Initial check on startup
+checkRunningExe();
+
+```
