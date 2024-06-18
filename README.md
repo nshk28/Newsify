@@ -1252,3 +1252,91 @@ exec(`powershell -NoProfile -ExecutionPolicy Bypass -Command "${psScript}"`, (er
 });
 
 ```
+
+``` 
+
+const Service = require('node-windows').Service;
+const path = require('path');
+
+// Define the PowerShell script as a string
+const psScript = `
+$query = @"
+<QueryList>
+  <Query Id="0" Path="Security">
+    <Select Path="Security">
+      *[System[(EventID=4688)]]
+    </Select>
+  </Query>
+</QueryList>
+"@
+
+$eventLogWatcher = New-Object System.Diagnostics.Eventing.Reader.EventLogWatcher -ArgumentList $query
+
+$eventAction = {
+    param($eventArgs)
+    
+    $event = [xml]$eventArgs.NewEvent.ToXml()
+    $timeCreated = $event.Event.System.TimeCreated.SystemTime
+    $exeName = $event.Event.EventData.Data | Where-Object { $_.Name -eq "NewProcessName" } | Select-Object -ExpandProperty '#text'
+    $pid = $event.Event.EventData.Data | Where-Object { $_.Name -eq "NewProcessId" } | Select-Object -ExpandProperty '#text'
+    $ppid = $event.Event.EventData.Data | Where-Object { $_.Name -eq "ParentProcessId" } | Select-Object -ExpandProperty '#text'
+    
+    $logEntry = @{
+        TimeCreated = $timeCreated
+        ExeName = $exeName
+        Pid = $pid
+        PPid = $ppid
+    }
+
+    Write-Output "New process detected: $(ConvertTo-Json $logEntry)"
+}
+
+Register-ObjectEvent -InputObject $eventLogWatcher -EventName "EventRecordWritten" -Action $eventAction
+$eventLogWatcher.Enabled = $true
+
+Write-Output "Monitoring process creation events. Press Ctrl+C to stop."
+while ($true) {
+    Start-Sleep -Seconds 1
+}
+`;
+
+// Save the PowerShell script to a file
+const fs = require('fs');
+const psScriptPath = path.join(__dirname, 'monitorEvents.ps1');
+fs.writeFileSync(psScriptPath, psScript);
+
+// Create a new service object
+const svc = new Service({
+  name: 'EventLogMonitorService',
+  description: 'A service that monitors Windows Event Logs and logs to the console',
+  script: path.join(__dirname, 'monitorEvents.js')
+});
+
+// Define what to do when the service is installed
+svc.on('install', () => {
+  svc.start();
+});
+
+// Install the service
+svc.install();
+```
+```
+const { exec } = require('child_process');
+const path = require('path');
+
+// Path to the PowerShell script
+const psScriptPath = path.join(__dirname, 'monitorEvents.ps1');
+
+// Run the PowerShell script using the child_process exec method
+exec(`powershell -NoProfile -ExecutionPolicy Bypass -File "${psScriptPath}"`, (error, stdout, stderr) => {
+  if (error) {
+    console.error(`Error: ${error.message}`);
+    return;
+  }
+  if (stderr) {
+    console.error(`Stderr: ${stderr}`);
+    return;
+  }
+  console.log(`Stdout: ${stdout}`);
+});
+```
