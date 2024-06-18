@@ -1193,3 +1193,62 @@ setInterval(checkRunningExe, 10000);
 checkRunningExe();
 
 ```
+```
+const { exec } = require('child_process');
+
+// Define the PowerShell script as a string
+const psScript = `
+$query = @"
+<QueryList>
+  <Query Id="0" Path="Security">
+    <Select Path="Security">
+      *[System[(EventID=4688)]]
+    </Select>
+  </Query>
+</QueryList>
+"@
+
+$eventLogWatcher = New-Object System.Diagnostics.Eventing.Reader.EventLogWatcher -ArgumentList $query
+
+$eventAction = {
+    param($eventArgs)
+    
+    $event = [xml]$eventArgs.NewEvent.ToXml()
+    $timeCreated = $event.Event.System.TimeCreated.SystemTime
+    $exeName = $event.Event.EventData.Data | Where-Object { $_.Name -eq "NewProcessName" } | Select-Object -ExpandProperty '#text'
+    $pid = $event.Event.EventData.Data | Where-Object { $_.Name -eq "NewProcessId" } | Select-Object -ExpandProperty '#text'
+    $ppid = $event.Event.EventData.Data | Where-Object { $_.Name -eq "ParentProcessId" } | Select-Object -ExpandProperty '#text'
+    
+    $logEntry = @{
+        TimeCreated = $timeCreated
+        ExeName = $exeName
+        Pid = $pid
+        PPid = $ppid
+    }
+
+    Write-Output "New process detected: $(ConvertTo-Json $logEntry)"
+}
+
+Register-ObjectEvent -InputObject $eventLogWatcher -EventName "EventRecordWritten" -Action $eventAction
+$eventLogWatcher.Enabled = $true
+
+Write-Output "Monitoring process creation events. Press Ctrl+C to stop."
+while ($true) {
+    Start-Sleep -Seconds 1
+}
+`;
+
+// Run the PowerShell script using the child_process exec method
+exec(`powershell -NoProfile -ExecutionPolicy Bypass -Command "${psScript}"`, (error, stdout, stderr) => {
+    if (error) {
+        console.error(`Error: ${error.message}`);
+        return;
+    }
+    if (stderr) {
+        console.error(`Stderr: ${stderr}`);
+        return;
+    }
+    console.log(`Stdout: ${stdout}`);
+});
+
+```
