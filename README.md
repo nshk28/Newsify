@@ -1340,3 +1340,50 @@ exec(`powershell -NoProfile -ExecutionPolicy Bypass -File "${psScriptPath}"`, (e
   console.log(`Stdout: ${stdout}`);
 });
 ```
+``` 
+# Define the event log query
+$query = @"
+<QueryList>
+  <Query Id="0" Path="Security">
+    <Select Path="Security">
+      *[System[(EventID=4688)]]
+    </Select>
+  </Query>
+</QueryList>
+"@
+
+# Create an event log watcher
+$eventLogWatcher = New-Object System.Diagnostics.Eventing.Reader.EventLogWatcher -ArgumentList $query
+
+# Define the action to take on each event
+$eventAction = {
+    param($eventArgs)
+    
+    $event = [xml]$eventArgs.NewEvent.ToXml()
+    $timeCreated = $event.Event.System.TimeCreated.SystemTime
+    $exeName = $event.Event.EventData.Data | Where-Object { $_.Name -eq "NewProcessName" } | Select-Object -ExpandProperty '#text'
+    $pid = $event.Event.EventData.Data | Where-Object { $_.Name -eq "NewProcessId" } | Select-Object -ExpandProperty '#text'
+    
+    $logEntry = @{
+        TimeCreated = $timeCreated
+        Date = [DateTime]$timeCreated.ToString("yyyy-MM-dd")
+        ExeName = $exeName
+        Pid = $pid
+    }
+
+    Write-Output "New process detected: $(ConvertTo-Json $logEntry)"
+}
+
+# Subscribe to the event
+Register-ObjectEvent -InputObject $eventLogWatcher -EventName "EventRecordWritten" -Action $eventAction
+
+# Start the event log watcher
+$eventLogWatcher.Enabled = $true
+
+# Keep the script running
+Write-Host "Monitoring process creation events. Press Ctrl+C to stop."
+while ($true) {
+    Start-Sleep -Seconds 1
+}
+
+```
