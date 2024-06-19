@@ -1387,3 +1387,48 @@ while ($true) {
 }
 
 ```
+``` 
+const { WinEventEmitter } = require('win-getevent');
+
+// Create a new WinEventEmitter
+const winEmitter = new WinEventEmitter({
+  providers: ['Microsoft-Windows-Security-Auditing'],
+  // or use LogName filter, defaults to 'System','Setup','Application','Security'
+  logNames: ['Security'],
+  frequency: 1000 /* ms */
+});
+
+// Event handler for 'data' event
+winEmitter.on('data', logs => {
+  // Contains an array of log objects
+  logs.forEach(log => {
+    const message = log.message;
+    if (message.includes('.exe')) {
+      const exePathMatch = message.match(/New Process Name:\s*(.*\.exe)/);
+      const startTime = log.timeCreated;
+
+      if (exePathMatch) {
+        const exePath = exePathMatch[1];
+        console.log(`exepath: ${exePath}, start time: ${startTime}`);
+      }
+    }
+  });
+});
+
+// Event handler for 'error' event
+winEmitter.on('error', err => {
+  console.log(`Error: ${err}`);
+});
+
+// Event handler for 'end' event
+winEmitter.on('end', () => {
+  console.log('Ended');
+});
+
+// Start polling
+winEmitter.start();
+
+// To stop the emitter, use: winEmitter.stop();
+// This will emit the 'end' event
+
+```
