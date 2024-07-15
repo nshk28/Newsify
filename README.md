@@ -1606,3 +1606,33 @@ By defining these routes and their specific functionalities, the Dashboard ensur
 
 ChatGPT can make mistakes. Check important info.
 '''
+'''
+/manager-info:
+
+This route fetches the entitlement details of all the employees under the specified employee ID. It retrieves information such as the account ID, employee name, whether the employee's activities are being tracked (isTracked), and the number of entitlements assigned to each employee. This data is then displayed in the Employee Access Details Table.
+/action-required:
+
+This route fetches and displays entitlements that have not been used for more than the time period set by the manager. The route queries the database for entitlements with an inactivity period exceeding the specified threshold (customizable in days and hours) and presents this information in the Action Required Table. This helps managers identify potentially inactive entitlements promptly.
+/sporadic-access:
+
+This route identifies and fetches entitlements that have been accessed less frequently than a set threshold within a specified time period. For example, if the period is set to the last month and the frequency threshold is set to less than five accesses, the route will retrieve entitlements accessed in the last month with fewer than five access events. This data is displayed in the Sporadic Access Details table, allowing managers to spot underused entitlements.
+/anomalous-logs:
+
+This route leverages a machine learning model running in the background to detect and display anomalous access entries. It identifies unusual patterns or activities that deviate from the norm, such as unexpected access times or locations. The route fetches these anomalous entries and displays them in the Anomalous Access Details table, providing managers with insights into potential security threats or irregularities in entitlement usage.
+2.6.4 Functionality
+Monitor and manage team entitlements: Managers can view detailed information about their team members' entitlements and take necessary actions.
+Track employee activities and changes: Managers can monitor access history and changes in entitlements for their team.
+Customize inactivity thresholds: Managers can set custom periods for identifying inactive entitlements, allowing for flexible and responsive management.
+Identify sporadic and anomalous access patterns: Detailed tables help managers detect unusual access patterns and take appropriate actions to mitigate risks.
+
+
+
+
+
+
+
+
+
+ChatGPT can make mistakes. Check important info.
+
+'''
