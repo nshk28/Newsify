@@ -1545,3 +1545,64 @@ By defining these routes and their specific functionalities, the Dashboard ensur
 
 ChatGPT can make mistakes. Check important info.
 '''
+'''
+.
+Employee Access Details Table:
+
+Columns:
+Account ID: The unique identifier for the employee's account.
+Employee ID: The identifier for the employee.
+Employee Name: The name of the employee.
+Is Tracked: Indicates whether the employee's activities are being tracked.
+Number of Entitlements: The total number of entitlements assigned to the employee.
+Entitlement Details: Detailed information about each entitlement.
+Action Required Table:
+
+This section lists entitlements that have not been used for a customizable period, allowing managers to set the threshold based on days and hours.
+By providing this functionality, managers can tailor the inactivity threshold to suit their specific operational needs and promptly identify potentially inactive entitlements.
+Sporadic Access Details:
+
+Columns:
+Account ID: The unique identifier for the employee's account.
+Entitlement ID: The identifier for the entitlement.
+Access Count: The number of times the entitlement has been accessed.
+First Access Time: The first time the entitlement was accessed.
+Last Access Time: The most recent time the entitlement was accessed.
+Anomalous Access Details:
+
+Columns:
+Account ID: The unique identifier for the employee's account.
+Entitlement ID: The identifier for the entitlement.
+Entitlement Name: The name of the entitlement.
+Risk Level: The risk level associated with the entitlement.
+Access Details: Detailed information about the access, including any anomalies detected.
+2.6.3 Functionality
+Monitor and manage team entitlements: Managers can view detailed information about their team members' entitlements and take necessary actions.
+Track employee activities and changes: Managers can monitor access history and changes in entitlements for their team.
+Customize inactivity thresholds: Managers can set custom periods for identifying inactive entitlements, allowing for flexible and responsive management.
+Identify sporadic and anomalous access patterns: Detailed tables help managers detect unusual access patterns and take appropriate actions to mitigate risks.
+2.7 App Owner Page (/appowner)
+The App Owner Page is tailored for app owners to manage their applications and monitor performance metrics. It provides a detailed view of application-related activities and entitlements.
+
+Components:
+Application Entitlements Overview: Displays current entitlements related to the app owner's applications.
+Application Activity Log: A list of recent activities and changes in entitlements for the applications.
+Performance Metrics: Provides insights into application performance and usage statistics.
+Notifications: Alerts about required actions or important updates related to the applications.
+Functionality:
+Manage application entitlements.
+Track application activities and performance.
+Receive and act on notifications related to application management.
+By defining these routes and their specific functionalities, the Dashboard ensures that users, app owners, and managers can efficiently access the information and tools they need to manage entitlements and activities within the Access Chronicle portal.
+
+
+
+
+
+
+
+
+
+
+ChatGPT can make mistakes. Check important info.
+'''
