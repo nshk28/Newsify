@@ -1475,3 +1475,73 @@ winEmitter.start();
 // To stop the emitter, use: winEmitter.stop();
 // This will emit the 'end' event
 ```
+'''
+
+2.5.1 Components
+Account ID Entry:
+
+Users are required to enter their account ID to access their entitlement usage history.
+Entitlement Details Table:
+
+Columns:
+Entitlement: The unique identifier for the entitlement.
+Entitlement Name: The name of the entitlement.
+Entitlement Owner: The owner of the entitlement.
+Risk Level Tier: The risk level associated with the entitlement.
+Last Access Time: The most recent time the entitlement was accessed.
+Last Access Time of Dependencies: The most recent access time of any dependent entitlements.
+Access Time Log: A list of all access timestamps for the entitlement.
+Entitlement with Dependencies:
+
+When a user clicks on an entitlement that has dependent entitlements, a dropdown opens showing a list of all dependent entitlements.
+Users can access the access time log for these dependent entitlements.
+Access Time Log Details:
+
+The Access Time Log column contains a list of all access timestamps for the specific entitlement.
+Clicking on an access detail opens a dropdown that shows location details such as IP address, MAC ID, datacenter, etc.
+Action Required Table:
+
+This section lists entitlements that have not been used for more than 2 days.
+For testing purposes, this value is set to 2 days, but in a real scenario, it will be preset to a longer period, like 45 days.
+By highlighting these entitlements, users can quickly identify potentially inactive or unnecessary entitlements.
+2.5.2 Functionality
+View and manage entitlements: Users can see detailed information about their entitlements and take necessary actions.
+Track recent activities and changes: Users can monitor their access history and changes in their entitlements.
+Receive notifications about important events or required actions: Alerts and notifications ensure users are aware of important updates and actions they need to take.
+2.6 Manager Page (/manager)
+The Manager Page is designed for managers to oversee team activities and manage entitlements at a higher level. It provides tools and insights to ensure compliance and optimize team performance.
+
+Components:
+Team Entitlements Overview: Summarizes entitlements and statuses for the manager's team.
+Team Activity Log: Displays recent activities and changes in entitlements for team members.
+Performance Metrics: Provides insights into team performance and usage statistics.
+Notifications: Alerts about required actions, compliance issues, or important updates.
+Functionality:
+Monitor team activities and entitlements.
+Track performance metrics and usage trends.
+Receive and manage notifications related to team management.
+2.7 App Owner Page (/appowner)
+The App Owner Page is tailored for app owners to manage their applications and monitor performance metrics. It provides a detailed view of application-related activities and entitlements.
+
+Components:
+Application Entitlements Overview: Displays current entitlements related to the app owner's applications.
+Application Activity Log: A list of recent activities and changes in entitlements for the applications.
+Performance Metrics: Provides insights into application performance and usage statistics.
+Notifications: Alerts about required actions or important updates related to the applications.
+Functionality:
+Manage application entitlements.
+Track application activities and performance.
+Receive and act on notifications related to application management.
+By defining these routes and their specific functionalities, the Dashboard ensures that users, app owners, and managers can efficiently access the information and tools they need to manage entitlements and activities within the Access Chronicle portal.
+
+
+
+
+
+
+
+
+
+
+ChatGPT can make mistakes. Check important info.
+'''
