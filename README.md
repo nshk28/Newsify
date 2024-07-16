@@ -1,6 +1,64 @@
 # Newsify
 Newsify: Your personalized news app delivering curated content tailored to your interests.Stay informed and connected with Newsify, your personalized news companion!
 
+'''
+Introduction
+In the Access Chronicle portal, the App Owner section is designed to cater to the needs of individuals responsible for managing in-house and desktop applications. For instance, suppose "A" is the owner of an in-house application, and "B" is the owner of a desktop application. This section provides these owners with comprehensive tools and insights to manage their applications' entitlements effectively.
+
+Components
+1. Action Required Section
+The Action Required Section displays entitlements that have not been used for more than the period set by the app owner. This helps in identifying and managing inactive entitlements. The table includes the following columns:
+
+Entitlement: The unique identifier for the entitlement.
+Entitlement Name: The descriptive name of the entitlement.
+Access Details: A link to view detailed information about the usage of the entitlement.
+Last Access Time: The most recent time the entitlement was accessed.
+When the app owner clicks on the Access Details link for a particular entitlement, a detailed view is presented. This view includes:
+
+Account ID: The identifier for each account that has accessed the entitlement.
+Employee ID: The identifier for the employee associated with the account.
+Employee Name: The name of the employee associated with the account.
+Last Access Time: The most recent time the entitlement was accessed by the account.
+Last Access Time for Dependency: The most recent time the dependent entitlement was accessed.
+2. Anomalous Access Details Table
+The Anomalous Access Details Table provides app owners with insights into any unusual access patterns detected for their applications. This table is crucial for identifying potential security risks and ensuring that only authorized users have access to sensitive entitlements. The table includes information such as:
+
+Entitlement: The unique identifier for the entitlement with anomalous access.
+Access Details: A link to view the detailed anomalous access information.
+Last Access Time: The most recent time the entitlement was accessed.
+Clicking on the Access Details link will show a detailed view of the anomalous access, including:
+
+Account ID: The identifier for each account with anomalous access.
+Employee ID: The identifier for the employee associated with the account.
+Employee Name: The name of the employee associated with the account.
+Anomalous Access Time: The time when the anomalous access occurred.
+Reason for Flagging: The reason why the access was flagged as anomalous.
+3. Application Cards
+In the App Owner section, each application, whether in-house or desktop, is represented by a separate card. These cards provide a consolidated view of the application's details and its entitlements. The cards include the following information:
+
+Application ID: The unique identifier for the application.
+Executable Path (for Desktop Applications): The file path to the executable of the desktop application.
+Entitlement Access Details: A detailed view of the access information for each entitlement associated with the application.
+Additionally, the cards display information about all dependent entitlements within the same card, ensuring that the app owner has a complete view of how entitlements are being used and managed across their applications.
+
+This documentation provides app owners with a clear understanding of the tools available to them for managing their applications' entitlements, ensuring efficient and secure access management.
+
+
+
+
+
+
+Is this conversation helpful so far?
+
+
+
+
+
+
+
+ChatGPT can make mistakes. Check important info.
+
+'''
 ```
 const { exec } = require('child_process');
 const cron = require('node-cron');
