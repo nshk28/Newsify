@@ -2,6 +2,54 @@
 Newsify: Your personalized news app delivering curated content tailored to your interests.Stay informed and connected with Newsify, your personalized news companion!
 
 '''
+ Access Time Log Detection
+Dataset Description
+The dataset used for anomalous access time log detection consists of access timestamps associated with user accounts. We have generated 1000 entries with 5% outliers. Outliers are identified based on both access time and location attributes.
+
+Data Generation Process
+The data generation process involves capturing access timestamps for each account. These timestamps are then processed through a machine learning pipeline to detect outliers.
+
+Machine Learning Pipeline
+The machine learning pipeline utilizes an Isolation Forest model to detect anomalies in two aspects: time and location.
+
+Time-based Anomaly Detection:
+
+The Isolation Forest model is trained on access timestamps to identify unusual patterns in the timing of access events.
+Predictions from the model determine which access events deviate significantly from the norm.
+Location-based Anomaly Detection:
+
+Similarly, another Isolation Forest model is trained on location data associated with access events.
+It identifies outliers based on deviations in the geographic origin of access attempts.
+Anomalous Access Log Table
+Detected anomalies are logged into an "Anomalous Access Log" table, which includes:
+
+Access Timestamp: Timestamp of the anomalous access event.
+Anomaly Reason: Indicates whether the anomaly is due to time-based or location-based factors.
+Integration with Frontend
+The frontend application fetches anomaly data directly from the "Anomalous Access Log" table. This allows users, app owners, and managers to view and respond to detected anomalies in real-time.
+
+Execution Frequency
+The ML pipeline runs periodically, either daily or weekly, to ensure timely detection of anomalous access events. This proactive approach helps maintain security and compliance within the application.
+
+This section covers the key components and processes involved in detecting and managing anomalous access time logs using machine learning techniques. Adjust the details as per your specific implementation and project requirements.
+
+
+2/2
+
+
+
+
+
+
+
+
+
+
+ChatGPT can make mistakes. Check import
+
+'''
+
+'''
 Design Considerations
 Introduction
 The design considerations section outlines the key aspects that have influenced the overall design of the Access Chronicle portal. This includes the choice of technology stack, the system architecture, and various design diagrams that provide a detailed view of the system components and their interactions.
