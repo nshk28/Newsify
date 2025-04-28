@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+requests
+beautifulsoup4
+trafilatura
+fake_useragent
+groq
+python-dotenv
+tenacity # Added for retry logic in summarizer

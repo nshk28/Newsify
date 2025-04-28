@@ -1,0 +1,347 @@
+/* Main App Container */
+.app {
+  max-width: 1300px; /* Slightly wider max-width */
+  margin: 0 auto;
+  padding: 20px 25px; /* Adjust padding */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure footer (if any) is pushed down */
+}
+
+/* Header Styles */
+.header {
+  background-color: var(--header-background);
+  padding: 15px 25px;
+  margin-bottom: 35px; /* More space below header */
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap; /* Allow controls to wrap on smaller screens */
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px; /* Space between items if they wrap */
+  box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.header h1 {
+  font-size: clamp(1.5em, 4vw, 2em); /* Responsive font size */
+  margin: 0;
+  color: var(--text-color);
+  font-weight: 600; /* Slightly bolder */
+}
+
+.header-controls {
+    display: flex;
+    gap: 12px; /* Space between buttons */
+    align-items: center;
+    flex-wrap: wrap; /* Allow buttons to wrap too */
+}
+
+.header-controls button {
+  padding: 9px 16px; /* Slightly larger buttons */
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--button-background);
+  color: var(--button-text);
+  font-size: 0.95em;
+  font-weight: 500;
+}
+
+.header-controls button:hover:not(:disabled) {
+  background-color: var(--button-hover-background);
+  opacity: 0.9; /* Slight effect on hover */
+}
+
+/* Container for Category Sections */
+.articles-container {
+    flex-grow: 1; /* Take up remaining vertical space */
+}
+
+/* Category Section Styles */
+.category-section {
+  margin-bottom: 45px; /* Space between categories */
+}
+
+.category-heading {
+  font-size: clamp(1.4em, 3.5vw, 1.8em); /* Responsive heading */
+  margin-bottom: 25px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent-border-color);
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+/* Article Grid Styles */
+.article-list {
+  display: grid;
+  /* More responsive columns: min 300px, max 1fr */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px; /* Slightly larger gap */
+}
+
+/* Individual Article Item Styles */
+.article-item {
+  background-color: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0; /* Remove padding, handle inside */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 3px 7px var(--shadow-color);
+  overflow: hidden; /* Clip image corners */
+  transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+}
+
+.article-item:hover {
+    transform: translateY(-6px); /* Slightly more lift */
+    box-shadow: 0 6px 14px var(--shadow-color);
+}
+
+.article-content-wrapper {
+    padding: 20px; /* Add padding inside wrapper */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Allow content to grow */
+}
+
+
+/* Article Image */
+.article-item img.article-image,
+.article-item img.placeholder-image {
+  width: 100%;
+  height: 200px; /* Increased fixed height */
+  object-fit: cover; /* Cover the area, crops if needed */
+  /* No border-radius needed due to overflow: hidden on parent */
+  background-color: var(--placeholder-bg); /* Placeholder color */
+  border-bottom: 1px solid var(--card-border); /* Separator */
+}
+
+.article-item img.placeholder-image {
+  object-fit: contain; /* Show whole placeholder */
+  padding: 20px; /* Padding around placeholder icon/text */
+  opacity: 0.6;
+  background-color: var(--placeholder-bg);
+  border: none; /* Remove border for placeholder */
+}
+
+
+/* Article Title */
+.article-item h3 {
+  font-size: 1.25em;
+  font-weight: 600; /* Bolder title */
+  margin-bottom: 12px;
+  line-height: 1.4; /* Adjust line height */
+  /* Limit title lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Max 3 lines */
+  line-clamp: 3; /* Standard property for compatibility */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(1.25em * 1.4 * 3); /* Approx height for 3 lines */
+}
+
+/* Metadata (Author, Source, Date) */
+.article-meta {
+  font-size: 0.88em;
+  color: var(--text-color);
+  opacity: 0.85;
+  margin-bottom: 15px;
+}
+
+.article-meta span {
+  display: block; /* Each meta item on new line */
+  margin-bottom: 5px;
+  line-height: 1.3;
+}
+.article-meta span:last-child {
+    margin-bottom: 0;
+}
+
+.article-meta .label {
+    font-weight: 600; /* Slightly bolder labels */
+    margin-right: 5px;
+}
+.article-meta a {
+    color: var(--link-color); /* Ensure links use variable color */
+    word-break: break-all; /* Break long source URLs */
+}
+.article-meta a:hover {
+    text-decoration: underline;
+}
+
+/* Impact Score Badge */
+.impact-score {
+  font-size: 0.9em;
+  font-weight: bold;
+  margin-bottom: 18px; /* Space below score */
+  padding: 4px 10px;
+  border-radius: 5px;
+  display: inline-block; /* Fit content */
+  color: var(--button-text); /* Use contrasting text */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+/* Assign background based on class */
+.impact-high { background-color: var(--impact-high); }
+.impact-medium { background-color: var(--impact-medium); color: #333; } /* Darker text on yellow */
+.impact-low { background-color: var(--impact-low); }
+
+/* Action Button (Summary) */
+.article-actions {
+  margin-top: auto; /* Push button to bottom */
+  padding: 20px; /* Padding around button */
+  padding-top: 10px; /* Less padding top */
+  border-top: 1px solid var(--card-border); /* Separator line */
+}
+
+.article-actions button {
+  padding: 10px 15px;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--button-background);
+  color: var(--button-text);
+  width: 100%;
+  font-size: 1em;
+  font-weight: 500;
+}
+
+.article-actions button:hover:not(:disabled) {
+  background-color: var(--button-hover-background);
+}
+
+/* Loading and Error States */
+.loading-indicator,
+.error-message {
+  text-align: center;
+  padding: 50px 20px;
+  font-size: 1.1em;
+  color: var(--text-color);
+  opacity: 0.8;
+  width: 100%; /* Ensure it spans width */
+}
+
+.error-message {
+    color: var(--error-color); /* Use error color variable */
+    font-weight: 500;
+}
+
+/* Summary Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Darker overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; /* Ensure modal is on top */
+  padding: 20px; /* Padding for smaller screens */
+}
+
+.modal-content {
+  background-color: var(--modal-background);
+  padding: 25px 30px;
+  border-radius: 8px;
+  border: 1px solid var(--modal-border);
+  max-width: 750px; /* Max width of modal */
+  width: 100%; /* Responsive width */
+  max-height: 85vh; /* Max height relative to viewport */
+  overflow-y: auto; /* Enable scrolling for long summaries */
+  position: relative;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 2em; /* Larger close icon */
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--text-color);
+  opacity: 0.6;
+  line-height: 1;
+  padding: 0;
+}
+.modal-close-button:hover {
+    opacity: 1;
+    color: var(--error-color); /* Red on hover */
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 20px; /* More space below title */
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 15px;
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.modal-content p.summary-text { /* Specific class for summary */
+    margin-bottom: 1em;
+    white-space: pre-wrap; /* Respect newlines from summary */
+    font-size: 1.05em;
+    line-height: 1.7; /* Improve readability */
+}
+.modal-content .loading-indicator,
+.modal-content .error-message {
+    padding: 30px 0; /* More padding inside modal for these states */
+    font-size: 1.05em;
+}
+
+/* Notifications / Toasts (Basic Example Style) */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 25px;
+  border-radius: 6px;
+  color: var(--button-text);
+  font-weight: 500;
+  z-index: 1100; /* Above modal overlay */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.notification.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0); /* Slide in */
+}
+.notification.success {
+    background-color: var(--success-color);
+}
+.notification.error {
+    background-color: var(--error-color);
+}
+.notification.info {
+    background-color: var(--button-background); /* Use button blue for info */
+}
+
+/* Media query for smaller screens if needed */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column; /* Stack header items */
+    align-items: flex-start; /* Align items to start */
+  }
+  .header-controls {
+    width: 100%; /* Make controls take full width */
+    justify-content: flex-start; /* Align buttons to start */
+  }
+  .article-list {
+    grid-template-columns: 1fr; /* Single column on small screens */
+    gap: 20px;
+  }
+  .modal-content {
+      padding: 20px;
+  }
+  .modal-content h2 {
+      font-size: 1.3em;
+  }
+}

@@ -1,0 +1,68 @@
+/* Light mode variables (default) */
+:root {
+  --background-color: #f8f9fa; /* Light grey background */
+  --text-color: #212529;       /* Dark grey text */
+  --card-background: #ffffff;  /* White cards */
+  --card-border: #dee2e6;       /* Light grey border */
+  --link-color: #007bff;       /* Standard blue links */
+  --link-hover-color: #0056b3; /* Darker blue on hover */
+  --button-background: #007bff; /* Blue buttons */
+  --button-text: #ffffff;       /* White button text */
+  --button-hover-background: #0056b3; /* Darker blue on hover */
+  --header-background: #e9ecef; /* Slightly darker header */
+  --modal-background: rgba(255, 255, 255, 0.98); /* Slightly transparent white modal */
+  --modal-border: #ced4da;
+  --impact-high: #dc3545;      /* Red for high impact */
+  --impact-medium: #ffc107;     /* Yellow for medium impact */
+  --impact-low: #198754;       /* Green for low impact */
+  --shadow-color: rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  --accent-border-color: #007bff; /* Accent for headings etc. */
+  --placeholder-bg: #eee;        /* Placeholder image background */
+  --placeholder-text: #aaa;      /* Placeholder image text */
+  --error-color: #dc3545;        /* Error text color */
+  --success-color: #198754;      /* Success text/indicator color */
+}
+
+/* Dark mode variables */
+body.dark-mode {
+  --background-color: #121212; /* Very dark grey */
+  --text-color: #e0e0e0;       /* Light grey text */
+  --card-background: #1e1e1e;  /* Slightly lighter dark card */
+  --card-border: #333333;       /* Darker grey border */
+  --link-color: #64b5f6;       /* Lighter blue link */
+  --link-hover-color: #90caf9; /* Even lighter blue on hover */
+  --button-background: #64b5f6; /* Lighter blue buttons */
+  --button-text: #121212;       /* Dark text on light buttons */
+  --button-hover-background: #90caf9; /* Lighter blue on hover */
+  --header-background: #1e1e1e; /* Same as card background */
+  --modal-background: rgba(30, 30, 30, 0.98); /* Slightly transparent dark modal */
+  --modal-border: #444444;
+  --impact-high: #f07178;      /* Lighter red */
+  --impact-medium: #ffd54f;     /* Lighter yellow */
+  --impact-low: #81c784;       /* Lighter green */
+  --shadow-color: rgba(255, 255, 255, 0.08); /* Subtle light shadow */
+  --accent-border-color: #64b5f6; /* Accent for headings etc. */
+  --placeholder-bg: #333;
+  --placeholder-text: #777;
+  --error-color: #f07178;        /* Lighter red for errors */
+  --success-color: #81c784;      /* Lighter green for success */
+}
+
+/* Apply variables and transitions */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+  color: var(--link-color);
+}
+a:hover {
+    color: var(--link-hover-color);
+}
+
+/* Add transitions for smooth theme changes on relevant elements */
+.card, .modal-content, .header, button, input, textarea, select {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

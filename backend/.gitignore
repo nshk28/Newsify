@@ -1,0 +1,15 @@
+_pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+*.json
+*.log
+.venv/
+venv/
+env/
+*.env.*
+!.env.example
+# Database file
+*.db
+*.db-journal # SQLite temporary files
